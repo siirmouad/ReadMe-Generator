@@ -7,16 +7,12 @@ function generateMarkdown(data) {
   let links = generateCredits(credits);
 
   return `# ${data.title}
-![last commit](https://img.shields.io/github/last-commit/${data.username}/${data.repo}?style=flat-square) ![license badge](https://img.shields.io/github/license/${data.username}/${data.repo}?style=flat-square)
 ### URL: ${data.url}
 ## Description
 ${data.description}
 ## Table of Contents
 * [Installation](#installation)
 * [Usage](#usage)
-* [Future Enhancements](#future-enhancements)
-* [Credits](#Credits)
-* [Questions](#questions)
 ## Installation
 \`\`\`
 ${data.installation}
