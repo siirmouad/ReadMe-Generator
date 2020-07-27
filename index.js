@@ -1,27 +1,32 @@
 const inquirer = require("inquirer");
 const fs = require("fs");
-
 const axios = require("axios");
+const writeToFile = require("write-to-file");
+const emoji = require("node-emoji");
+const markdown = require("./utils/generateMarkdown.js");
+// const github = require("./utils/github.js");
 
-// const emoji = require("node-emoji");
+// emojis
+const checkmark = emoji.get("heavy_check_mark");
 
+// command line prompts
 const questions = [
   "Enter your full name:",
   "Enter your email:",
   "Enter your Github username:",
   "Enter the name of the Github repo:",
   "Project title:",
-  "Description:",
   "Deployed page url:",
+  "Project description:",
   "Installation:",
   "Usage:",
-  "Contributors:",
   "(comma-delimited) Credits:",
-  "Enter ideas for Future Developments:",
+  "Enter ideas for Future Enhancements:",
 ];
 
-let userPrompts = [];
+let prompts = [];
 
+// contructor function to create prompt object for each question
 const Prompt = function (question) {
   (this.type = "input"),
     (this.message = question),
@@ -35,15 +40,14 @@ const Prompt = function (question) {
   };
 };
 
+// generates an array of prompt objects to pass into inquirer
 for (i = 0; i < questions.length; i++) {
-  userPrompts[i] = new Prompt(questions[i]);
-  userPrompts[i].name = userPrompts[i].name.substring(
-    0,
-    userPrompts[i].name.length - 1
-  );
+  prompts[i] = new Prompt(questions[i]);
+  prompts[i].name = prompts[i].name.substring(0, prompts[i].name.length - 1);
 }
 
-inquirer.prompt(userPrompts).then(function (response) {
+// command line prompts
+inquirer.prompt(prompts).then(function (response) {
   let data = markdown(response);
 
   (async () => {
@@ -55,3 +59,48 @@ inquirer.prompt(userPrompts).then(function (response) {
     }
   })();
 });
+
+function generateCredits(credits) {
+  let creditsArr = credits.split(",");
+
+  for (var i = 0; i < creditsArr.length; i++) {
+    creditsArr[i] = creditsArr[i].trim().toLowerCase();
+  }
+
+  let renderCredits = [];
+
+  for (var j = 0; j < creditsArr.length; j++) {
+    let credit = creditsArr[j].toLowerCase();
+    if (credit === "inquirer") {
+      renderCredits.push(
+        `* [Inquirer](https://www.npmjs.com/package/inquirer)`
+      );
+    } else if (credit === "jest") {
+      renderCredits.push(`* [Jest](https://jestjs.io/)`);
+    } else if (credit === "bootstrap") {
+      renderCredits.push(`* [Bootstrap](https://getbootstrap.com/)`);
+    } else if (credit === "font awesome" || credit === "fontawesome") {
+      renderCredits.push(`* [Font Awesome](https://fontawesome.com/)`);
+    } else if (credit === "moments" || credit === "moments.js") {
+      renderCredits.push(`* [Moments.js](https://momentjs.com/)`);
+    } else if (credit === "express" || credit === "express.js") {
+      renderCredits.push(
+        `* [Express.js](https://www.npmjs.com/package/express)`
+      );
+    } else if (credit === "mysql") {
+      renderCredits.push(`* [MySQL](https://www.npmjs.com/package/mysql)`);
+    } else if (credit === "chalk") {
+      renderCredits.push(`* [Chalk](https://www.npmjs.com/package/chalk)`);
+    } else if (credit === "fs") {
+      renderCredits.push(
+        `* [file-system](https://www.npmjs.com/package/file-system)`
+      );
+    } else {
+      renderCredits.push(`* ${credit}`);
+    }
+  }
+
+  return renderCredits.join("\n\n");
+}
+
+module.exports = generateCredits;
