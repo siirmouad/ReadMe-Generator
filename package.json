@@ -11,6 +11,8 @@
   "dependencies": {
     "axios": "^0.19.2",
     "dotenv": "^8.0.0",
+    "emoji": "^0.3.2",
+    "fs": "0.0.1-security",
     "html-pdf": "^2.2.0",
     "inquirer": "^6.3.1"
   }
